@@ -1,0 +1,8 @@
+<% @workers.each do |worker| %>
+check process <%= @app %>_sneakers_worker<%= worker[:suffix] %> with pidfile <%= @dir %>/shared/pids/sneakers_worker<%= worker[:suffix] %>.pid
+  start program = "/bin/su -c 'cd <%= @dir %>/current; /usr/bin/env RAILS_ENV=<%= @env %> <%= @dir %>/current/bin/sneakers_worker start<%= " --identifier=#{worker[:identifier]}" if worker[:identifier] %> <%= worker[:options] %>' - <%= @user %>"
+    with timeout <%= worker[:timeout] %> seconds
+  stop program = "/bin/su -c 'cd <%= @dir %>/current; /usr/bin/env RAILS_ENV=<%= @env %> <%= @dir %>/current/bin/sneakers_worker stop<%= " --identifier=#{worker[:identifier]}" if worker[:identifier] %>' - <%= @user %>"
+    with timeout <%= worker[:timeout] %> seconds
+  group sneakers_worker
+<% end %>
